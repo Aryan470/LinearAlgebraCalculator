@@ -217,6 +217,14 @@ public class Matrix implements LinearAlgebraObject {
 		return new Matrix(newComponents);
 	}
 
+	public Matrix pow(int k) {
+		Matrix product = new Matrix(this);
+		for (int i = 0; i < k; i++) {
+			product = product.multiply(this);
+		}
+		return product;
+	}
+
 
 	@Override
 	public String toString() {

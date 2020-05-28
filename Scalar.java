@@ -24,6 +24,10 @@ public class Scalar implements LinearAlgebraObject {
 		return new Scalar(getValue() / b.getValue());
 	}
 
+	public Scalar pow(Scalar b) {
+		return new Scalar(Math.pow(getValue(), b.getValue()));
+	}
+
 	public double getValue() {
 		return value;
 	}

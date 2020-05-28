@@ -5,19 +5,21 @@ import java.util.HashMap;
 public class Compiler {
 	public static HashMap<Character, BiFunction<String, String, String>> operatorMap = new HashMap<Character, BiFunction<String, String, String>>();
 	public static HashMap<Character, Integer> precedenceMap = new HashMap<Character, Integer>();
-	public static int maxPrecedence = 2;
+	public static int maxPrecedence = 3;
 	static {
 		operatorMap.put(',', (String a, String b) -> String.format("%s,%s", a, b));
 		operatorMap.put('+', (String a, String b) -> String.format("add(%s,%s)", a, b));
 		operatorMap.put('-', (String a, String b) -> String.format("sub(%s,%s)", a, b));
 		operatorMap.put('*', (String a, String b) -> String.format("mult(%s,%s)", a, b));
-		operatorMap.put('/', (String a, String b) -> String.format("div(%s,%s)", a, b));;
+		operatorMap.put('/', (String a, String b) -> String.format("div(%s,%s)", a, b));
+		operatorMap.put('^', (String a, String b) -> String.format("pow(%s,%s)", a, b));
 
 		precedenceMap.put(',', 0);
 		precedenceMap.put('+', 1);
 		precedenceMap.put('-', 1);
 		precedenceMap.put('*', 2);
 		precedenceMap.put('/', 2);
+		precedenceMap.put('^', 3);
 	}
 
 	public static String compile(String command) {
@@ -47,9 +49,9 @@ public class Compiler {
 	}
 
 	private static String evaluate(String command) {
-		int[] lowestOperators = findLowestOperators(command);
+		ArrayList<Integer> lowestOperators = findLowestOperators(command);
 		// Here is a standalone token (function call, parenthesized expression, name, number)
-		if (lowestOperators.length == 0) {
+		if (lowestOperators.size() == 0) {
 			if (command.indexOf("(") != -1) {
 				// This must be a function call or parenthesized expression
 				int start = command.indexOf("(");
@@ -73,15 +75,15 @@ public class Compiler {
 		ArrayList<String> tokens = tokenize(command, lowestOperators);
 		String LHS = evaluate(tokens.remove(0));
 
-		for (int i = 0; i < lowestOperators.length; i++) {
-			char operator = command.charAt(lowestOperators[i]);
+		for (int i = 0; i < lowestOperators.size(); i++) {
+			char operator = command.charAt(lowestOperators.get(i));
 			String RHS = evaluate(tokens.remove(0));
 			LHS = operatorMap.get(operator).apply(LHS, RHS);
 		}
 
 		return LHS;
 	}
-	private static int[] findLowestOperators(String command) {
+	private static ArrayList<Integer> findLowestOperators(String command) {
 		int parenCount = 0;
 		int minPrecedence = maxPrecedence + 1;
 		ArrayList<Integer> locations = new ArrayList<Integer>();
@@ -110,7 +112,7 @@ public class Compiler {
 			}
 		}
 
-		return makeArr(locations);
+		return locations;
 	}
 
 	private static int[] makeArr(ArrayList<Integer> oldList) {
@@ -123,24 +125,24 @@ public class Compiler {
 
 
 	// Precondition: lowestOperators should have at least one location
-	private static ArrayList<String> tokenize(String command, int[] lowestOperators) {
+	private static ArrayList<String> tokenize(String command, ArrayList<Integer> lowestOperators) {
 		ArrayList<String> tokens = new ArrayList<String>();
-		tokens.add(command.substring(0, lowestOperators[0]));
-		for (int i = 1; i < lowestOperators.length; i++) {
+		tokens.add(command.substring(0, lowestOperators.get(0)));
+		for (int i = 1; i < lowestOperators.size(); i++) {
 			// Take the string between the previous and current operator
-			String newToken = command.substring(lowestOperators[i - 1] + 1, lowestOperators[i]);
+			String newToken = command.substring(lowestOperators.get(i - 1) + 1, lowestOperators.get(i));
 			tokens.add(newToken);
 		}
 		// Add final token
-		tokens.add(command.substring(lowestOperators[lowestOperators.length - 1] + 1));
-		fillZero(tokens);
+		tokens.add(command.substring(lowestOperators.get(lowestOperators.size() - 1) + 1));
+		fillZero(tokens, lowestOperators);
 		return tokens;
 	}
 
-	public static void fillZero(ArrayList<String> input) {
-		for (int i = 0; i < input.size(); i++) {
-			if (input.get(i).isEmpty()) {
-				input.set(i, "0");
+	public static void fillZero(ArrayList<String> tokens, ArrayList<Integer> lowestOperators) {
+		for (int i = tokens.size() - 1; i >= 0; i--) {
+			if (tokens.get(i).isEmpty()) {
+				tokens.set(i, "0");
 			}
 		}
 	}

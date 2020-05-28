@@ -6,7 +6,6 @@ import java.util.function.Function;
 
 public class Parser {
 	private HashMap<String, LinearAlgebraObject> sessionObjects;
-	private static final List<String> reservedTokens = Arrays.asList("+ - * / inv det trans | () ( ) [] [ ] {} { }".split(" "));
 	private static HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>> operations;
 
 	public Parser() {
@@ -19,6 +18,7 @@ public class Parser {
 		operations.put("sub", x -> Operators.subtract(x[0], x[1]));
 		operations.put("mult", x -> Operators.multiply(x[0], x[1]));
 		operations.put("div", x -> Operators.divide(x[0], x[1]));
+		operations.put("pow", x -> Operators.pow(x[0], x[1]));
 
 		operations.put("mag", x -> Operators.magnitude((Vector)(x[0])));
 		operations.put("proj", x -> Operators.project((Vector)(x[0]), (Vector)(x[1])));
@@ -129,9 +129,6 @@ public class Parser {
 		command.replace(", ", ",");
 
 		String[] tokens = command.split(" ");
-		if (reservedTokens.contains(tokens[0])) {
-			throw new IllegalArgumentException(tokens[0] + " is a reserved token");
-		}
 
 		if (tokens.length == 1 || !tokens[1].equals("=")) {
 			command = "ans = " + command;

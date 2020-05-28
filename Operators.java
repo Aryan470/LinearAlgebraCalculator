@@ -78,6 +78,21 @@ public class Operators {
 		}
 	}
 
+	// SS, MS
+	public static LinearAlgebraObject pow(LinearAlgebraObject x, LinearAlgebraObject y) {
+		if (SS(x, y)) {
+			Scalar a = (Scalar)(x);
+			Scalar b = (Scalar)(y);
+			return a.pow(b);
+		} else if (MS(x, y)) {
+			Matrix a = (Matrix)(x);
+			Scalar b = (Scalar)(y);
+			return a.pow((int)(b.getValue()));
+		} else {
+			throw new UnsupportedOperationException("Cannot raise " + x.getClass() + " to " + y.getClass());
+		}
+	}
+
 	// SS, VV, VS, MM, MV, MS
 	public static LinearAlgebraObject multiply(LinearAlgebraObject x, LinearAlgebraObject y) {
 		if (SS(x, y)) {

@@ -30,7 +30,6 @@ public class TerminalMain {
 					printHelp();
 				} else if (!command.equals("exit")){
 					printError(e);
-					System.out.println(e.getCause());
 				}
 			}
 		}
@@ -45,6 +44,7 @@ public class TerminalMain {
 	}
 
 	private static void printError(Exception e) {
+		e.printStackTrace();
 		System.out.println("Invalid command: " + e);
 		System.out.println("Type \"help\" for help or \"exit\" to quit");
 	}
