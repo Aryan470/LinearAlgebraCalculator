@@ -48,6 +48,7 @@ public class Compiler {
 
 	private static String evaluate(String command) {
 		int[] lowestOperators = findLowestOperators(command);
+		// Here is a standalone token (function call, parenthesized expression, name, number)
 		if (lowestOperators.length == 0) {
 			if (command.indexOf("(") != -1) {
 				// This must be a function call or parenthesized expression
@@ -127,10 +128,20 @@ public class Compiler {
 		tokens.add(command.substring(0, lowestOperators[0]));
 		for (int i = 1; i < lowestOperators.length; i++) {
 			// Take the string between the previous and current operator
-			tokens.add(command.substring(lowestOperators[i - 1] + 1, lowestOperators[i]));
+			String newToken = command.substring(lowestOperators[i - 1] + 1, lowestOperators[i]);
+			tokens.add(newToken);
 		}
 		// Add final token
 		tokens.add(command.substring(lowestOperators[lowestOperators.length - 1] + 1));
+		fillZero(tokens);
 		return tokens;
+	}
+
+	public static void fillZero(ArrayList<String> input) {
+		for (int i = 0; i < input.size(); i++) {
+			if (input.get(i).isEmpty()) {
+				input.set(i, "0");
+			}
+		}
 	}
 }

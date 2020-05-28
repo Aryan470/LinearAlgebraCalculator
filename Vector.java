@@ -11,7 +11,7 @@ public class Vector implements LinearAlgebraObject {
 		this.magnitude = calcMagnitude();
 		this.size = components.length;
 
-		if (!Operators.doubleEquals(magnitude, 1.0)) {
+		if (!(Operators.doubleEquals(magnitude, 1.0) || Operators.doubleEquals(magnitude, 0.0))) {
 			this.direction = this.multiply(1.0 / this.magnitude);
 		} else {
 			this.direction = this;
@@ -84,8 +84,8 @@ public class Vector implements LinearAlgebraObject {
 	// Projects this vector onto another
 	public Vector project(Vector u) {
 		// If this is v:
-		// proj_u (v) = v * (u/|u|)
-		return u.getDirection().multiply(this.dot(u));
+		// proj_u (v) = dir(u) * (v * dir(u))
+		return u.getDirection().multiply(this.dot(u.getDirection()));
 	}
 
 	@Override

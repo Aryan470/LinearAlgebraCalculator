@@ -116,7 +116,7 @@ public class Matrix implements LinearAlgebraObject {
 	// Take the dot product of each row of matrix by vector
 	public Vector multiply(Vector A) {
 		if (this.dimensions[1] != A.getSize()) {
-			throw new IllegalArgumentException("Matrix columns and vector size must be equal for product (" + Arrays.toString(this.dimensions) + ") and" + A.getSize());
+			throw new IllegalArgumentException("Matrix columns and vector size must be equal for product (" + Arrays.toString(this.dimensions) + ") and " + A.getSize());
 		}
 		double[] dotComponents = new double[A.getSize()];
 		for (int i = 0; i < dimensions[0]; i++) {
@@ -126,7 +126,7 @@ public class Matrix implements LinearAlgebraObject {
 	}
 
 	public Matrix add(Matrix A) {
-		if (!dimensions.equals(A.getDimensions())) {
+		if (!Arrays.equals(dimensions, A.getDimensions())) {
 			throw new IllegalArgumentException("Matrices must have same dimensions");
 		}
 		double[][] newComponents = A.getComponents();
