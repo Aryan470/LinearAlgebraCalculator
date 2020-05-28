@@ -13,6 +13,12 @@ Can store scalars, vectors, and matrices
 + `b = x`
 + `v = [x, 10]`
 
+### Retrieval
+To see the value of a stored variable or use it in a new expression, simply type the name
+
++ `x`
++ `y = x + 2`
+
 ### Binary operators
 + Addition and subtraction are defined only for 2 of the same type
 	- `5 + 5`
