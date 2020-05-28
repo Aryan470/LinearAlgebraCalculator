@@ -1,0 +1,6 @@
+a = create(1, 1, 1, 1)
+b = create(0, 1, 2, 3)
+y = create(2, 5, 8, 11)
+M = create(a, b)
+mult(inv(mult(trans(M), M)), trans(M))
+mult(ans, y)
