@@ -46,3 +46,4 @@ Parenthesis can be used besides functions to prioritize expressions
 + `vars`: see all stored variables and their values
 + `ans`: see most recent output
 + `clear`: delete all stored variables, including `ans`
++ `exit`: exit the calculator
