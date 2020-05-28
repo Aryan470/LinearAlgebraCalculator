@@ -35,3 +35,8 @@ Functions are used on vectors and matrices:
 ### Order of operations
 Parenthesis can be used besides functions to prioritize expressions
 + `2 * (3 + 5)` is treated differently than `2 * 3 + 5`
+
+### Keywords
++ `vars`: see all stored variables and their values
++ `ans`: see most recent output
++ `clear`: delete all stored variables, including `ans`
