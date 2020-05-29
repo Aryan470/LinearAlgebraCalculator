@@ -7,7 +7,6 @@ public class UserFunction implements LinearAlgebraObject {
 
     // Parse "f(x, y) = 2 * x" into [x, y], 2 * vars[0]
     // Precondition: command is in the correct format
-    // TODO: Prevent nested definitions somehow, they cause stack overflow
     public UserFunction(String command) {
         command = command.replaceAll("\\s", "");
         this.params = findParams(command);

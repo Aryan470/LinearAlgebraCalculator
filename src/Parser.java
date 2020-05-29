@@ -5,7 +5,7 @@ import java.util.function.Function;
 public class Parser {
     private HashMap<String, LinearAlgebraObject> sessionObjects;
     private HashMap<String, UserFunction> userFunctions;
-    
+
     private static HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>> operations;
     static {
         operations = new HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>>();
@@ -110,18 +110,24 @@ public class Parser {
 			} else {
 				currentToken += currentChar;
 			}
-		}
+        }
+        LinearAlgebraObject result;
         if (operations.containsKey(functionName)) {
             LinearAlgebraObject[] params = new LinearAlgebraObject[tokens.size()];
             for (int i = 0; i < tokens.size(); i++) {
                 params[i] = evaluate(tokens.get(i));
             }
             // System.out.println(functionName + "(" + Arrays.toString(params) + ")\n");
-            return operations.get(functionName).apply(params);
+            result =  operations.get(functionName).apply(params);
         } else {
             String[] params = tokens.toArray(new String[tokens.size()]);
-            return evaluate(Compiler.compile(userFunctions.get(functionName).apply(params)));
+            try {
+                result = evaluate(Compiler.compile(userFunctions.get(functionName).apply(params)));
+            } catch(StackOverflowError e) {
+                throw new IllegalArgumentException("Functions cannot be defined in terms of each other");
+            }
         }
+        return result;
 	}
 
 	private LinearAlgebraObject readToken(String token) {
