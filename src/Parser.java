@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 public class Parser {
     private HashMap<String, LinearAlgebraObject> sessionObjects;
-    private HashMap<String, Function<String[], String>> userFunctions;
+    private HashMap<String, UserFunction> userFunctions;
     
     private static HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>> operations;
     static {
@@ -34,7 +34,7 @@ public class Parser {
 	// Clean input, compile to readable instructions, evaluate, return result
 
 	public LinearAlgebraObject parse(String command) {
-		command = command.replaceAll("\\s","");
+        command = command.replaceAll("\\s","");
 		if (command.equals("clear")) {
 			clearAll();
 			return null;
@@ -44,39 +44,45 @@ public class Parser {
 			}
 			return null;
 		} else if (command.equals("funcs")) {
-            for (String key : userFunctions.keySet()) {
-                System.out.println(key + " = " + sessionObjects.get(key));
+            for (UserFunction func : userFunctions.values()) {
+                System.out.println(func);
             }
+            return null;
         }
 		if (command.isEmpty()) {
 			return null;
 		}
-		String name = "ans";
+        String name = "ans";
 		int equalsIndex = command.indexOf("=");
 		if (equalsIndex != -1) {
 			name = command.substring(0, equalsIndex);
 			command = command.substring(equalsIndex + 1);
-		}
+        }
+        if (matchesFunction(name)) {
+            UserFunction newFunc = new UserFunction(name + "=" + command);
+            userFunctions.put(name.substring(0, name.indexOf("(")), newFunc);
+            return newFunc;
+        }
 		String compiled = Compiler.compile(command);
 		LinearAlgebraObject result = evaluate(compiled);
 
 		sessionObjects.put(name, result);
 		return result;
-	}
+    }
+    
+    private boolean matchesFunction(String text) {
+        return text.matches("\\w+\\(\\w+[\\w, ]*\\)");
+    }
 
 	private void clearAll() {
         this.sessionObjects = new HashMap<String, LinearAlgebraObject>();
-        this.userFunctions = new HashMap<String, Function<String[], String>>();
+        this.userFunctions = new HashMap<String, UserFunction>();
 	}
 
 	private LinearAlgebraObject evaluate(String expression) {
 		int parenIndex = expression.indexOf("(");
 		if (parenIndex == -1) {
 			return readToken(expression);
-		}
-
-		if (expression.charAt(expression.length() - 1) != ')') {
-			throw new IllegalArgumentException("Malformed expression (missing end parenthesis): \"" + expression + "\"");
 		}
 
 		String functionName = expression.substring(0, parenIndex);
@@ -110,11 +116,11 @@ public class Parser {
             for (int i = 0; i < tokens.size(); i++) {
                 params[i] = evaluate(tokens.get(i));
             }
-            //System.out.println(functionName + "(" + Arrays.toString(params) + ")\n");
+            // System.out.println(functionName + "(" + Arrays.toString(params) + ")\n");
             return operations.get(functionName).apply(params);
         } else {
             String[] params = tokens.toArray(new String[tokens.size()]);
-            return evaluate(userFunctions.get(functionName).apply(params));
+            return evaluate(Compiler.compile(userFunctions.get(functionName).apply(params)));
         }
 	}
 
