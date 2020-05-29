@@ -1,7 +1,5 @@
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
 import java.util.function.Function;
 
 public class Parser {
@@ -10,7 +8,7 @@ public class Parser {
 
 	public Parser() {
 		clearVar();
-		this.operations = new HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>>();
+		operations = new HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>>();
 
 		operations.put("create", x -> Operators.create(x));
 
@@ -62,8 +60,6 @@ public class Parser {
 	private void clearVar() {
 		this.sessionObjects = new HashMap<String, LinearAlgebraObject>();
 	}
-
-	private String compile(String[] tokens) {return null;}
 
 	// add(x, sub(inv(y), c))
 	private LinearAlgebraObject evaluate(String expression) {
@@ -123,18 +119,5 @@ public class Parser {
 				throw new IllegalArgumentException(token + " cannot be cast to double and is not valid session object");
 			}
 		}
-	}
-
-	private String[] format(String command) {
-		command.replace(", ", ",");
-
-		String[] tokens = command.split(" ");
-
-		if (tokens.length == 1 || !tokens[1].equals("=")) {
-			command = "ans = " + command;
-		}
-
-		tokens = command.split(" ");
-		return tokens;
 	}
 }

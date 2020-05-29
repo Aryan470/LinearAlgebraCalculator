@@ -115,14 +115,6 @@ public class Compiler {
 		return locations;
 	}
 
-	private static int[] makeArr(ArrayList<Integer> oldList) {
-		int[] newArr = new int[oldList.size()];
-		for (int i = 0; i < oldList.size(); i++) {
-			newArr[i] = oldList.get(i);
-		}
-		return newArr;
-	}
-
 
 	// Precondition: lowestOperators should have at least one location
 	private static ArrayList<String> tokenize(String command, ArrayList<Integer> lowestOperators) {

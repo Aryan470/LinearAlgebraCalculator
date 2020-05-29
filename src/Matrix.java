@@ -36,15 +36,6 @@ public class Matrix implements LinearAlgebraObject {
 		this(A.getComponents());
 	}
 
-	// TODO: find efficient method
-	private double calcDeterminant() {
-		if (this.dimensions[0] != this.dimensions[1]) {
-			throw new UnsupportedOperationException("Cannot take determinant of " + dimensions[0] + "x" + dimensions[1] + " matrix");
-		}
-
-		return 0.0;
-	}
-
 	public double getDeterminant() {
 		if (this.determinant == null) {
 			// TODO: change to efficient method
@@ -144,14 +135,6 @@ public class Matrix implements LinearAlgebraObject {
 
 	public int[] getDimensions() {
 		return dimensions;
-	}
-
-	private Vector[] getRowVectors() {
-		Vector[] rows = new Vector[components.length];
-		for (int i = 0; i < components.length; i++) {
-			rows[i] = new Vector(components[i]);
-		}
-		return rows;
 	}
 
 	private Matrix minor(int row, int col) {

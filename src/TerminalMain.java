@@ -34,7 +34,7 @@ public class TerminalMain {
 			}
 		}
 		while ((ISFILE ? console.hasNextLine() : true) && !command.equals("exit"));
-
+        console.close();
 	}
 
 	public static void printHelp() {
