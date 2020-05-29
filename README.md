@@ -40,12 +40,20 @@ Functions are used on vectors and matrices:
 + `det(A)`: determinant of matrix A
 + `trans(A)`: transpose of matrix A
 
+#### Custom Functions
+User-defined functions are supported (multivariate, scalars, vectors, matrices):
++ `f(x) = 10 * x^2`
++ `f(2)`
++ `g(x, y) = proj(x, y) * 2`
+* Please do not do nested definitions
+
 ### Order of operations
 Parenthesis can be used besides functions to prioritize expressions
 + `2 * (3 + 5)` is treated differently than `2 * 3 + 5`
 
 ### Keywords
 + `vars`: see all stored variables and their values
++ `funcs`: see all user defined functions
 + `ans`: see most recent output
-+ `clear`: delete all stored variables, including `ans`
++ `clear`: delete all stored variables and custom functions, including `ans`
 + `exit`: exit the calculator
