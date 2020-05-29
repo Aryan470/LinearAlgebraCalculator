@@ -4,13 +4,11 @@ import java.util.function.Function;
 
 public class Parser {
     private HashMap<String, LinearAlgebraObject> sessionObjects;
-    private HashMap<String, Function<String[], String>> userOperations;
+    private HashMap<String, Function<String[], String>> userFunctions;
+    
     private static HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>> operations;
-
-	public Parser() {
-		clearVar();
+    static {
         operations = new HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>>();
-        userOperations = new HashMap<String, Function<String[], String>>();
 
 		operations.put("create", x -> Operators.create(x));
 
@@ -26,7 +24,10 @@ public class Parser {
 		operations.put("inv", x -> Operators.inverse((Matrix)(x[0])));
 		operations.put("det", x -> Operators.determinant((Matrix)(x[0])));
 		operations.put("trans", x -> Operators.transpose((Matrix)(x[0])));
+    }
 
+	public Parser() {
+		clearAll();
 		System.out.println("Linear Algebra Terminal started");
 	}
 
@@ -35,14 +36,18 @@ public class Parser {
 	public LinearAlgebraObject parse(String command) {
 		command = command.replaceAll("\\s","");
 		if (command.equals("clear")) {
-			clearVar();
+			clearAll();
 			return null;
 		} else if (command.equals("vars")) {
 			for (String key : sessionObjects.keySet()) {
 				System.out.println(key + " = " + sessionObjects.get(key));
 			}
 			return null;
-		}
+		} else if (command.equals("funcs")) {
+            for (String key : userFunctions.keySet()) {
+                System.out.println(key + " = " + sessionObjects.get(key));
+            }
+        }
 		if (command.isEmpty()) {
 			return null;
 		}
@@ -59,8 +64,9 @@ public class Parser {
 		return result;
 	}
 
-	private void clearVar() {
-		this.sessionObjects = new HashMap<String, LinearAlgebraObject>();
+	private void clearAll() {
+        this.sessionObjects = new HashMap<String, LinearAlgebraObject>();
+        this.userFunctions = new HashMap<String, Function<String[], String>>();
 	}
 
 	private LinearAlgebraObject evaluate(String expression) {
@@ -74,7 +80,7 @@ public class Parser {
 		}
 
 		String functionName = expression.substring(0, parenIndex);
-		if (!operations.containsKey(functionName) && !userOperations.containsKey(functionName)) {
+		if (!operations.containsKey(functionName) && !userFunctions.containsKey(functionName)) {
 			throw new IllegalArgumentException("\"" + functionName + "\" is not a valid operation");
 		}
 
@@ -104,12 +110,11 @@ public class Parser {
             for (int i = 0; i < tokens.size(); i++) {
                 params[i] = evaluate(tokens.get(i));
             }
-
             //System.out.println(functionName + "(" + Arrays.toString(params) + ")\n");
             return operations.get(functionName).apply(params);
         } else {
             String[] params = tokens.toArray(new String[tokens.size()]);
-            return evaluate(userOperations.get(functionName).apply(params));
+            return evaluate(userFunctions.get(functionName).apply(params));
         }
 	}
 
