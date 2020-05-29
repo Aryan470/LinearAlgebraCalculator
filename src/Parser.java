@@ -28,7 +28,7 @@ public class Parser {
 		System.out.println("Linear Algebra Terminal started");
 	}
 
-	// Clean input, tokenize, compile to readable instructions, evaluate, return result
+	// Clean input, compile to readable instructions, evaluate, return result
 
 	public LinearAlgebraObject parse(String command) {
 		command = command.replaceAll("\\s","");
@@ -61,7 +61,6 @@ public class Parser {
 		this.sessionObjects = new HashMap<String, LinearAlgebraObject>();
 	}
 
-	// add(x, sub(inv(y), c))
 	private LinearAlgebraObject evaluate(String expression) {
 		int parenIndex = expression.indexOf("(");
 		if (parenIndex == -1) {
