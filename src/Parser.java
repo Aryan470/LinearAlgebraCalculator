@@ -3,12 +3,14 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 public class Parser {
-	private HashMap<String, LinearAlgebraObject> sessionObjects;
-	private static HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>> operations;
+    private HashMap<String, LinearAlgebraObject> sessionObjects;
+    private HashMap<String, Function<String[], String>> userOperations;
+    private static HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>> operations;
 
 	public Parser() {
 		clearVar();
-		operations = new HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>>();
+        operations = new HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>>();
+        userOperations = new HashMap<String, Function<String[], String>>();
 
 		operations.put("create", x -> Operators.create(x));
 
@@ -72,7 +74,7 @@ public class Parser {
 		}
 
 		String functionName = expression.substring(0, parenIndex);
-		if (!operations.containsKey(functionName)) {
+		if (!operations.containsKey(functionName) && !userOperations.containsKey(functionName)) {
 			throw new IllegalArgumentException("\"" + functionName + "\" is not a valid operation");
 		}
 
@@ -97,14 +99,18 @@ public class Parser {
 				currentToken += currentChar;
 			}
 		}
+        if (operations.containsKey(functionName)) {
+            LinearAlgebraObject[] params = new LinearAlgebraObject[tokens.size()];
+            for (int i = 0; i < tokens.size(); i++) {
+                params[i] = evaluate(tokens.get(i));
+            }
 
-		LinearAlgebraObject[] params = new LinearAlgebraObject[tokens.size()];
-		for (int i = 0; i < tokens.size(); i++) {
-			params[i] = evaluate(tokens.get(i));
-		}
-
-		//System.out.println(functionName + "(" + Arrays.toString(params) + ")\n");
-		return operations.get(functionName).apply(params);
+            //System.out.println(functionName + "(" + Arrays.toString(params) + ")\n");
+            return operations.get(functionName).apply(params);
+        } else {
+            String[] params = tokens.toArray(new String[tokens.size()]);
+            return evaluate(userOperations.get(functionName).apply(params));
+        }
 	}
 
 	private LinearAlgebraObject readToken(String token) {
