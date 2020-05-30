@@ -57,3 +57,9 @@ Parenthesis can be used besides functions to prioritize expressions
 + `ans`: see most recent output
 + `clear`: delete all stored variables and custom functions, including `ans`
 + `exit`: exit the calculator
+
+## Dependencies
+* Java
+  + No Java dependencies
+* Python
+  + No Python dependencies
