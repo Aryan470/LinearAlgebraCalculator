@@ -38,14 +38,14 @@ public class TerminalMain {
 	}
 
 	public static void printHelp() {
-		System.out.println("Linear Algebra Terminal v0.01");
+		System.out.println("Linear Algebra Terminal v0.1");
 		System.out.println("Try something like \"x = 2\", \"x + 10\", \"v = [2, 5, 3]\", or \"2 * v\"");
 		System.out.println("Defined: +, -, *, /, mag, proj, det, inv, trans");
 	}
 
 	private static void printError(Exception e) {
-		e.printStackTrace();
-		System.out.println("Invalid command: " + e);
+		// e.printStackTrace();
+		System.out.println("Invalid command: " + e.getMessage());
 		System.out.println("Type \"help\" for help or \"exit\" to quit");
 	}
 }

@@ -138,7 +138,7 @@ public class Parser {
 			if (sessionObjects.containsKey(token)) {
 				return sessionObjects.get(token);
 			} else {
-				throw new IllegalArgumentException(token + " cannot be cast to double and is not valid session object");
+				throw new IllegalArgumentException("\"" + token + "\" cannot be cast to double and is not valid session object");
 			}
 		}
 	}
