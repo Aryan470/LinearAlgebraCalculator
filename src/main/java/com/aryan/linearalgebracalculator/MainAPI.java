@@ -8,6 +8,7 @@ public class MainAPI {
 	private static Parser global = new Parser();
 	
 	public static void main(String[] args) {
+        sessions.put("test", global);
 		Javalin app = Javalin.create().start(7000);
 		app.get("/", ctx -> ctx.result("Hello World"));
 		app.post("/query", ctx -> {
