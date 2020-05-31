@@ -1,3 +1,1 @@
-tasks:
-  - init: ./build.sh
 image: gitpod/workspace-full
