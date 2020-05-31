@@ -1,1 +1,3 @@
+tasks:
+  - init: mvn clean install
 image: gitpod/workspace-full
