@@ -39,6 +39,15 @@ public class UserFunction implements LinearAlgebraObject {
         return String.format(compiled, (Object[]) (callParams));
     }
 
+    public String getHead() {
+        String full = toString();
+        return full.substring(0, full.indexOf("="));
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
     public String toString() {
         String out = name + "(" + params[0];
         for (int i = 1; i < params.length; i++) {

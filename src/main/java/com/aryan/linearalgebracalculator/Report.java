@@ -2,27 +2,39 @@ package com.aryan.linearalgebracalculator;
 
 import java.util.HashMap;
 
-public class Report implements LinearAlgebraObject {
-    private String message;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-    public Report(String message) {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Report implements LinearAlgebraObject {
+    private String name;
+    private String message;
+    private HashMap<String, LinearAlgebraObject> content;
+
+    public Report(String name, HashMap<String, ? extends LinearAlgebraObject> content) {
+        this.name = name;
+        this.content = (HashMap<String, LinearAlgebraObject>) (content);
+        this.message = null;
+    }
+
+    public Report(String name, String message) {
+        this.name = name;
+        this.content = null;
         this.message = message;
     }
 
-    public <T extends LinearAlgebraObject> Report(HashMap<String, T> objectList) {
-        this.message = "";
-        for (String key : objectList.keySet()) {
-            LinearAlgebraObject thisObject = objectList.get(key);
-            if (thisObject instanceof UserFunction) {
-                this.message += thisObject;
-            } else {
-                this.message += String.format("%s = %s", key, thisObject);
-            }
-            this.message += "\n";
-        }
+    public String getName() {
+        return name;
+    }
+
+    public HashMap<String, LinearAlgebraObject> getContent() {
+        return content;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public String toString() {
-        return message;
+        return name;
     }
 }

@@ -14,9 +14,13 @@ public class MainAPI {
 	public static void main(String[] args) {
         Javalin app = Javalin.create().start(7000);
         
+        // Guarantee a valid token for session
         app.before(ctx -> {
-            if (ctx.cookieStore("token") == null) {
-                String token = makeToken();
+            // Could be null or invalid/expired, we need to fix this
+            String token = ctx.cookieStore("token");
+            if (token == null || !sessions.containsKey(token)) {
+                // This is an invalid token, we must replace with a fresh one
+                token = makeToken();
                 ctx.cookieStore("token", token);
                 sessions.put(token, new Parser());
             }
@@ -31,9 +35,13 @@ public class MainAPI {
             
             try {
                 LinearAlgebraObject result = thisSession.parse(expression);
-                ctx.result(result.toString());
+                ctx.json(result);
                 ctx.status(200);
             } catch (Exception e) {
+                System.out.println("Error!");
+                System.out.println("Token: " + token);
+                System.out.println("Session: " + thisSession);
+                System.out.println("Expression: " + expression);
                 e.printStackTrace();
                 ctx.result("Bad input: " + e.getMessage());
                 ctx.status(422);

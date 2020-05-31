@@ -39,11 +39,11 @@ public class Parser {
         command = command.replaceAll("\\s","");
 		if (command.equals("clear")) {
 			clearAll();
-			return new Report("Cleared memory");
+			return new Report("message", "Cleared memory");
 		} else if (command.equals("vars")) {
-			return new Report(sessionObjects);
+			return new Report("variables", sessionObjects);
 		} else if (command.equals("funcs")) {
-            return new Report(userFunctions);
+            return new Report("functions", userFunctions);
         }
 		if (command.isEmpty()) {
 			return null;

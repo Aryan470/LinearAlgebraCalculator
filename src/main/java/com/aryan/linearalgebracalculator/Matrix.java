@@ -2,6 +2,9 @@ package com.aryan.linearalgebracalculator;
 
 import java.util.Arrays;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(value = {"inverse", "determinant"})
 public class Matrix implements LinearAlgebraObject {
 	private final double[][] components;
 	private final int[] dimensions;

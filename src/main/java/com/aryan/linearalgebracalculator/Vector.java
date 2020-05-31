@@ -2,6 +2,9 @@ package com.aryan.linearalgebracalculator;
 
 import java.util.Arrays;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(value = {"magnitude", "direction"})
 public class Vector implements LinearAlgebraObject {
 	private final double[] components;
 	private final double magnitude;
