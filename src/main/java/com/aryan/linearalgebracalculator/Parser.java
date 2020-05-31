@@ -39,17 +39,11 @@ public class Parser {
         command = command.replaceAll("\\s","");
 		if (command.equals("clear")) {
 			clearAll();
-			return null;
+			return new Report("Cleared memory");
 		} else if (command.equals("vars")) {
-			for (String key : sessionObjects.keySet()) {
-				System.out.println(key + " = " + sessionObjects.get(key));
-			}
-			return null;
+			return new Report(sessionObjects);
 		} else if (command.equals("funcs")) {
-            for (UserFunction func : userFunctions.values()) {
-                System.out.println(func);
-            }
-            return null;
+            return new Report(userFunctions);
         }
 		if (command.isEmpty()) {
 			return null;
