@@ -1,11 +1,11 @@
 com/aryan/linearalgebracalculator/LinearAlgebraObject.class
 com/aryan/linearalgebracalculator/TerminalMain.class
-com/aryan/linearalgebracalculator/MainAPI.class
 com/aryan/linearalgebracalculator/Scalar.class
-com/aryan/linearalgebracalculator/UserFunction.class
-com/aryan/linearalgebracalculator/Compiler.class
 com/aryan/linearalgebracalculator/Matrix.class
 com/aryan/linearalgebracalculator/Parser.class
 com/aryan/linearalgebracalculator/Report.class
-com/aryan/linearalgebracalculator/Operators.class
 com/aryan/linearalgebracalculator/Vector.class
+com/aryan/linearalgebracalculator/MainAPI.class
+com/aryan/linearalgebracalculator/UserFunction.class
+com/aryan/linearalgebracalculator/Compiler.class
+com/aryan/linearalgebracalculator/Operators.class

@@ -12,7 +12,9 @@ public class MainAPI {
     private static final Base64.Encoder encoder = Base64.getUrlEncoder();
 	
 	public static void main(String[] args) {
-        Javalin app = Javalin.create().start(7000);
+        Javalin app = Javalin.create(config -> {
+            config.addStaticFiles("/public");
+        }).start(7000);
         
         // Guarantee a valid token for session
         app.before(ctx -> {
@@ -26,13 +28,15 @@ public class MainAPI {
             }
         });
 
-        app.get("/", ctx -> ctx.result("Hello World"));
+        app.get("/", ctx -> {
+            
+        });
         
 		app.post("/query", ctx -> {
             String token = ctx.cookieStore("token");
             Parser thisSession = sessions.get(token);
             String expression = ctx.formParam("expression", "0");
-            
+            System.out.println(token + ": " + expression);
             try {
                 LinearAlgebraObject result = thisSession.parse(expression);
                 ctx.json(result);
