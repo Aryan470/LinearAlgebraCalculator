@@ -3,10 +3,12 @@ package com.aryan.linearalgebracalculator;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.function.Function;
+import java.time.Instant;
 
 public class Parser {
     private HashMap<String, LinearAlgebraObject> sessionObjects;
     private HashMap<String, UserFunction> userFunctions;
+    private Instant lastUsed;
 
     private static HashMap<String, Function<LinearAlgebraObject[], LinearAlgebraObject>> operations;
     static {
@@ -29,12 +31,12 @@ public class Parser {
     }
 
 	public Parser() {
-		clearAll();
+        clearAll();
+        lastUsed = Instant.now();
 		System.out.println("Linear Algebra Terminal started");
 	}
 
 	// Clean input, compile to readable instructions, evaluate, return result
-
 	public LinearAlgebraObject parse(String command) {
         command = command.replaceAll("\\s","");
 		if (command.equals("clear")) {
@@ -60,10 +62,15 @@ public class Parser {
             return newFunc;
         }
 		String compiled = Compiler.compile(command);
-		LinearAlgebraObject result = evaluate(compiled);
+        LinearAlgebraObject result = evaluate(compiled);
+        lastUsed = Instant.now();
 
 		sessionObjects.put(name, result);
 		return result;
+    }
+
+    public Instant getLastUsed() {
+        return lastUsed;
     }
     
     private boolean matchesFunction(String text) {

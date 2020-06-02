@@ -1,8 +1,12 @@
 package com.aryan.linearalgebracalculator;
 
 import java.security.SecureRandom;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import io.javalin.Javalin;
 
 public class MainAPI {
@@ -10,12 +14,14 @@ public class MainAPI {
 
     private static final SecureRandom randomGen = new SecureRandom();
     private static final Base64.Encoder encoder = Base64.getUrlEncoder();
-    
-    // TODO: Implement a lastUsed field on the parser that keeps track of the last time it was used, and schedule a cleanser that deletes unused parsers after a certain amount of inactivity
+    public static final int SESSION_TIMEOUT = 3600; // Seconds of inactivity before sessions die
+
 	public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
             config.addStaticFiles("/public");
         }).start(7000);
+
+        scheduleCleanser();
         
         // Guarantee a valid token for session
         app.before(ctx -> {
@@ -27,10 +33,6 @@ public class MainAPI {
                 ctx.cookieStore("token", token);
                 sessions.put(token, new Parser());
             }
-        });
-
-        app.get("/", ctx -> {
-            
         });
         
 		app.post("/query", ctx -> {
@@ -52,7 +54,29 @@ public class MainAPI {
                 ctx.status(422);
             }
 		});
-	}
+    }
+
+    private static void scheduleCleanser() {
+        Timer time = new Timer();
+        time.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                clearExpired();
+            }
+        }, 0, 300 * 1000);
+    }
+    
+    private static void clearExpired() {
+        int cleared = 0;
+        Instant ageLimit = Instant.now().minusSeconds(SESSION_TIMEOUT);
+        for (String session : sessions.keySet()) {
+            Instant age = sessions.get(session).getLastUsed();
+            if (age.isBefore(ageLimit)) {
+                sessions.remove(session);
+                cleared += 1;
+            }
+        }
+        System.out.println("Cleared " + cleared + " inactive sessions");
+    }
 
     private static String makeToken() {
         byte[] randBytes = new byte[24];
