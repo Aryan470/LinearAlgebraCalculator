@@ -116,7 +116,7 @@ public class Matrix implements LinearAlgebraObject {
 		if (this.dimensions[1] != A.getSize()) {
 			throw new IllegalArgumentException("Matrix columns and vector size must be equal for product (" + Arrays.toString(this.dimensions) + ") and " + A.getSize());
 		}
-		double[] dotComponents = new double[A.getSize()];
+		double[] dotComponents = new double[dimensions[0]];
 		for (int i = 0; i < dimensions[0]; i++) {
 			dotComponents[i] = A.dot(new Vector(components[i]));
 		}

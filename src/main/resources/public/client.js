@@ -27,13 +27,39 @@ function processResults(responseText) {
             result = name + "<br>" + response.content;
         }
     } else if (type == "Scalar") {
-        result = response.value;
-
+        result = drawNumber(response.value);
     } else if (type == "Vector") {
-        result = response.components;
+        result = drawVector(response.components);
         
     } else if (type == "Matrix") {
-        result = response.components;
+        result = drawMatrix(response.components);
     }
-    document.getElementById("output").innerHTML = result;
+    document.getElementById("output").innerText = result;
+    MathJax.typeset();
+}
+
+function drawNumber(number) {
+    return "$" + number + "$"
+}
+
+function drawVector(components) {
+    let out = "$\\begin{bmatrix}";
+    components.forEach(item => {
+        out += item + "\\\\";
+    });
+    out += "\\end{bmatrix}$";
+    return out;
+}
+
+function drawMatrix(components) {
+    let out = "$\\begin{bmatrix}";
+    components.forEach(row => {
+        row.forEach(cell => {
+            out += cell + "&";
+        });
+        out = out.slice(0, -1);
+        out += "\\\\";
+    });
+    out += "\\end{bmatrix}$"
+    return out;
 }

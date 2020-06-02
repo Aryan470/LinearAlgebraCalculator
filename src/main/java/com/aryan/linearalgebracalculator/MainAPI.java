@@ -49,7 +49,7 @@ public class MainAPI {
                 System.out.println("Token: " + token);
                 System.out.println("Session: " + thisSession);
                 System.out.println("Expression: " + expression);
-                e.printStackTrace();
+                // e.printStackTrace();
                 ctx.result("Bad input: " + e.getMessage());
                 ctx.status(422);
             }
