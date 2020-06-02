@@ -30,14 +30,14 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-										linearAlgebraCalculator.MainAPI
+										com.aryan.linearalgebracalculator.MainAPI
 									</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
-                            <appendAssemblyId>false</appendAssemblyId>
+                            <!--<appendAssemblyId>false</appendAssemblyId>-->
                         </configuration>
                     </execution>
                 </executions>

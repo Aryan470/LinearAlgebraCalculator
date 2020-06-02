@@ -19,7 +19,7 @@ public class MainAPI {
 	public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
             config.addStaticFiles("/public");
-        }).start(7000);
+        }).start(getHerokuAssignedPort());
 
         scheduleCleanser();
         
@@ -54,6 +54,15 @@ public class MainAPI {
                 ctx.status(422);
             }
 		});
+    }
+
+    private static int getHerokuAssignedPort() {
+        String herokuPort = System.getenv("PORT");
+        if (herokuPort != null) {
+            return Integer.parseInt(herokuPort);
+        } else {
+            return 7000;
+        }
     }
 
     private static void scheduleCleanser() {
