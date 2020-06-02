@@ -3,8 +3,10 @@ package com.aryan.linearalgebracalculator;
 import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonIgnoreProperties(value = {"magnitude", "direction"})
+@JsonTypeInfo(include=JsonTypeInfo.As.PROPERTY, use=JsonTypeInfo.Id.NAME)
 public class Vector implements LinearAlgebraObject {
 	private final double[] components;
 	private final double magnitude;
