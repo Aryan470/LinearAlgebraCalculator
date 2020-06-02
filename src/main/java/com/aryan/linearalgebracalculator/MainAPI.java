@@ -10,7 +10,8 @@ public class MainAPI {
 
     private static final SecureRandom randomGen = new SecureRandom();
     private static final Base64.Encoder encoder = Base64.getUrlEncoder();
-	
+    
+    // TODO: Implement a lastUsed field on the parser that keeps track of the last time it was used, and schedule a cleanser that deletes unused parsers after a certain amount of inactivity
 	public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
             config.addStaticFiles("/public");
