@@ -21,21 +21,44 @@ function processResults(responseText) {
     const type = response["@type"];
     let result = "NO RESULT";
     if (type == "Report") {
-        if (response.message != null) {
+        if (response.message) {
             result = name + "<br>" + response.message;
         } else {
-            result = name + "<br>" + response.content;
+            result = drawContent(response.content);
         }
     } else if (type == "Scalar") {
         result = drawNumber(response.value);
     } else if (type == "Vector") {
         result = drawVector(response.components);
-        
+
     } else if (type == "Matrix") {
         result = drawMatrix(response.components);
     }
     document.getElementById("output").innerText = result;
     MathJax.typeset();
+}
+
+function drawContent(content) {
+    let output = "";
+    Object.keys(content).forEach(key => {
+        let thisType = content[key]["@type"];
+
+        if (thisType === "UserFunction") {
+            output = content[key]["full"];
+        } else {
+            let result;
+            if (thisType === "Scalar") {
+                result = key + " = " + drawNumber(content[key]["value"]);
+            } else if (thisType === "Vector") {
+                result = drawVector(content[key]["components"]);
+            } else if (thisType === "Matrix") {
+                result = drawMatrix(content[key]["components"]);
+            }
+            output += key + " = " + result
+        }
+        output += "\n";
+    });
+    return output;
 }
 
 function drawNumber(number) {

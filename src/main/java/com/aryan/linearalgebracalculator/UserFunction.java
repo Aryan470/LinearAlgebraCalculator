@@ -4,6 +4,8 @@ public class UserFunction implements LinearAlgebraObject {
     // First variable locations, second variable locations, so on
     private String[] params;
     private String expression;
+    // For serialization purposes
+    private String full;
     private String name;
     private String compiled;
 
@@ -15,6 +17,7 @@ public class UserFunction implements LinearAlgebraObject {
         this.name = command.substring(0, command.indexOf("("));
         this.expression = command.substring(command.indexOf("=") + 1);
         this.compiled = generateCompiled();
+        this.full = toString();
     }
 
     private String[] findParams(String command) {
@@ -39,9 +42,8 @@ public class UserFunction implements LinearAlgebraObject {
         return String.format(compiled, (Object[]) (callParams));
     }
 
-    public String getHead() {
-        String full = toString();
-        return full.substring(0, full.indexOf("="));
+    public String getFull() {
+        return full;
     }
 
     public String getExpression() {

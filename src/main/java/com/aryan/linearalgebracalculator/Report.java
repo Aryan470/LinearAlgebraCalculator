@@ -12,6 +12,8 @@ public class Report implements LinearAlgebraObject {
     private String message;
     private HashMap<String, LinearAlgebraObject> content;
 
+    // We can be sure that since the type extends LinearAlgebraObject it is safe
+    @SuppressWarnings("unchecked")
     public Report(String name, HashMap<String, ? extends LinearAlgebraObject> content) {
         this.name = name;
         this.content = (HashMap<String, LinearAlgebraObject>) (content);
