@@ -3,14 +3,13 @@ package com.aryan.linearalgebracalculator;
 import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonTypeInfo(include=JsonTypeInfo.As.PROPERTY, use=JsonTypeInfo.Id.NAME)
 public class Report implements LinearAlgebraObject {
     private String name;
     private String message;
     private HashMap<String, LinearAlgebraObject> content;
+    public final String type = "report";
 
     // We can be sure that since the type extends LinearAlgebraObject it is safe
     @SuppressWarnings("unchecked")

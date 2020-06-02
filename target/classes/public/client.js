@@ -18,41 +18,47 @@ function processExpression() {
 
 function processResults(responseText) {
     let response = JSON.parse(responseText);
-    const type = response["@type"];
+    const type = response["type"];
     let result = "NO RESULT";
-    if (type == "Report") {
+    if (type === "report") {
         if (response.message) {
             result = name + "<br>" + response.message;
         } else {
             result = drawContent(response.content);
         }
-    } else if (type == "Scalar") {
+    } else if (type === "scalar") {
         result = drawNumber(response.value);
-    } else if (type == "Vector") {
+    } else if (type === "vector") {
         result = drawVector(response.components);
 
-    } else if (type == "Matrix") {
+    } else if (type === "matrix") {
         result = drawMatrix(response.components);
+    } else if (type === "function") {
+        result = drawFunction(response);
     }
     document.getElementById("output").innerText = result;
     MathJax.typeset();
 }
 
+function drawFunction(fullFunc) {
+    return "$" + fullFunc + "$";
+}
+
 function drawContent(content) {
     let output = "";
     Object.keys(content).forEach(key => {
-        let thisType = content[key]["@type"];
+        let thisType = content[key]["type"];
 
-        if (thisType === "UserFunction") {
-            output = content[key]["full"];
+        if (thisType === "function") {
+            output = content[key].full;
         } else {
             let result;
-            if (thisType === "Scalar") {
-                result = key + " = " + drawNumber(content[key]["value"]);
-            } else if (thisType === "Vector") {
-                result = drawVector(content[key]["components"]);
-            } else if (thisType === "Matrix") {
-                result = drawMatrix(content[key]["components"]);
+            if (thisType === "scalar") {
+                result = key + " = " + drawNumber(content[key].value);
+            } else if (thisType === "vector") {
+                result = drawVector(content[key].components);
+            } else if (thisType === "matrix") {
+                result = drawMatrix(content[key].components);
             }
             output += key + " = " + result
         }

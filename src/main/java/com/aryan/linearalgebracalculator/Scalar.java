@@ -1,10 +1,8 @@
 package com.aryan.linearalgebracalculator;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-@JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.NAME)
 public class Scalar implements LinearAlgebraObject {
-	private final double value;
+    private final double value;
+    public final String type = "scalar";
 	public Scalar(double value) {
 		this.value = value;
 	}

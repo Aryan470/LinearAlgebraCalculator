@@ -8,6 +8,7 @@ public class UserFunction implements LinearAlgebraObject {
     private String full;
     private String name;
     private String compiled;
+    public final String type = "function";
 
     // Parse "f(x, y) = 2 * x" into [x, y], 2 * vars[0]
     // Precondition: command is in the correct format

@@ -71,6 +71,7 @@ public class MainAPI {
             public void run() {
                 clearExpired();
             }
+        // Clear every 5 minutes
         }, 0, 300 * 1000);
     }
     
