@@ -51,10 +51,16 @@ function updateHistory() {
     const expr = document.getElementById("expression").value;
     const out = document.getElementById("output").innerHTML;
     let newLog = document.createElement("p");
+    newLog.onmouseover = function greyBackground() {this.style.backgroundColor = '#F0F0F0'};
+    newLog.onmouseout = function whiteBackground() {this.style.backgroundColor = '#FFFFFF'};
+    newLog.onclick = function fillExpression() {
+        const content = newLog.innerHTML;
+        const input = content.substring(4, content.indexOf("<br>"));
+        document.getElementById("expression").value = input;
+    };
     newLog.innerHTML = "In: " + expr + "<br>Out: " + out;
 
     document.getElementById("history").prepend(newLog);
-
     document.getElementById("expression").value = "";
 }
 
