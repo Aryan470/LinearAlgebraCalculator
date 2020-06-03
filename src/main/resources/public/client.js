@@ -12,19 +12,17 @@ function processExpression() {
             if (xhr.status === 200) {
                 processResults(xhr.responseText);
             } else {
-                processError(xhr.responseText);
+                document.getElementById("error").innerText = xhr.responseText;
+                console.log(xhr.responseText);
             }
         }
     };
     xhr.send(data);
 }
 
-function processError(responseText) {
-    console.log(responseText);
-}
-
 // This processes a 200 response
 function processResults(responseText) {
+    document.getElementById("error").innerText = "";
     const response = JSON.parse(responseText);
     const type = response["type"];
     let result = "NO RESULT";
