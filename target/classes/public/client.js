@@ -25,7 +25,6 @@ function processError(responseText) {
 
 // This processes a 200 response
 function processResults(responseText) {
-    document.getElementById("expression").value = "";
     const response = JSON.parse(responseText);
     const type = response["type"];
     let result = "NO RESULT";
@@ -46,7 +45,19 @@ function processResults(responseText) {
     }
 
     document.getElementById("output").innerText = result.split("(").join("{(").split(")").join(")}");
+    updateHistory();
     MathJax.typeset();
+}
+
+function updateHistory() {
+    const expr = document.getElementById("expression").value;
+    const out = document.getElementById("output").innerHTML;
+    let newLog = document.createElement("p");
+    newLog.innerHTML = "In: " + expr + "<br>Out: " + out;
+
+    document.getElementById("history").prepend(newLog);
+
+    document.getElementById("expression").value = "";
 }
 
 function drawFunction(func) {
