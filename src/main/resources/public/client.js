@@ -1,6 +1,5 @@
 function processExpression() {
-    let form = document.getElementById("inputForm");
-    let expression = form.elements.namedItem("expression").value;
+    let expression = document.getElementById("expression").value;
 
     const data = new FormData();
     data.append("expression", expression);
@@ -17,22 +16,21 @@ function processExpression() {
 }
 
 function processResults(responseText) {
-    let response = JSON.parse(responseText);
+    const response = JSON.parse(responseText);
     const type = response["type"];
     let result = "NO RESULT";
     if (type === "report") {
         if (response.message) {
-            result = name + "<br>" + response.message;
+            result = name + ": " + response.message;
         } else {
             result = drawContent(response.content);
         }
     } else if (type === "scalar") {
-        result = drawNumber(response.value);
+        result = drawNumber(response);
     } else if (type === "vector") {
-        result = drawVector(response.components);
-
+        result = drawVector(response);
     } else if (type === "matrix") {
-        result = drawMatrix(response.components);
+        result = drawMatrix(response);
     } else if (type === "function") {
         result = drawFunction(response);
     }
@@ -40,8 +38,12 @@ function processResults(responseText) {
     MathJax.typeset();
 }
 
-function drawFunction(fullFunc) {
-    return "$" + fullFunc + "$";
+function drawFunction(func) {
+    const funcString = func.full;
+    const parenIndex = funcString.indexOf("(");
+    const name = funcString.substring(0, parenIndex);
+    return "$\\mathit{" + name + "}" + funcString.substring(parenIndex) + "$";
+
 }
 
 function drawContent(content) {
@@ -50,15 +52,15 @@ function drawContent(content) {
         let thisType = content[key]["type"];
 
         if (thisType === "function") {
-            output = content[key].full;
+            output = drawFunction(content[key]);
         } else {
             let result;
             if (thisType === "scalar") {
-                result = key + " = " + drawNumber(content[key].value);
+                result = drawNumber(content[key]);
             } else if (thisType === "vector") {
-                result = drawVector(content[key].components);
+                result = drawVector(content[key]);
             } else if (thisType === "matrix") {
-                result = drawMatrix(content[key].components);
+                result = drawMatrix(content[key]);
             }
             output += key + " = " + result
         }
@@ -68,10 +70,11 @@ function drawContent(content) {
 }
 
 function drawNumber(number) {
-    return "$" + number + "$"
+    return "$" + number.value + "$";
 }
 
-function drawVector(components) {
+function drawVector(vector) {
+    const components = vector.components;
     let out = "$\\begin{bmatrix}";
     components.forEach(item => {
         out += item + "\\\\";
@@ -80,7 +83,8 @@ function drawVector(components) {
     return out;
 }
 
-function drawMatrix(components) {
+function drawMatrix(matrix) {
+    const components = matrix.components;
     let out = "$\\begin{bmatrix}";
     components.forEach(row => {
         row.forEach(cell => {
