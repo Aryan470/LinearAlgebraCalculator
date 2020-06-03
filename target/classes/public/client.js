@@ -74,7 +74,7 @@ function drawContent(content) {
         let thisType = content[key]["type"];
 
         if (thisType === "function") {
-            output = drawFunction(content[key]);
+            output += drawFunction(content[key]);
         } else {
             let result;
             if (thisType === "scalar") {
