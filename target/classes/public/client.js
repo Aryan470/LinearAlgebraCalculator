@@ -8,14 +8,24 @@ function processExpression() {
     const url = "/query";
     xhr.open("POST", url, true);
     xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
-            processResults(xhr.responseText);
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                processResults(xhr.responseText);
+            } else {
+                processError(xhr.responseText);
+            }
         }
     };
     xhr.send(data);
 }
 
+function processError(responseText) {
+    console.log(responseText);
+}
+
+// This processes a 200 response
 function processResults(responseText) {
+    document.getElementById("expression").value = "";
     const response = JSON.parse(responseText);
     const type = response["type"];
     let result = "NO RESULT";
@@ -34,7 +44,8 @@ function processResults(responseText) {
     } else if (type === "function") {
         result = drawFunction(response);
     }
-    document.getElementById("output").innerText = result;
+
+    document.getElementById("output").innerText = result.split("(").join("{(").split(")").join(")}");
     MathJax.typeset();
 }
 
@@ -95,4 +106,18 @@ function drawMatrix(matrix) {
     });
     out += "\\end{bmatrix}$"
     return out;
+}
+
+// Process enter key -> button click
+function setUp() {
+    setUpEnterClick();
+}
+
+function setUpEnterClick() {
+    document.getElementById("expression").addEventListener("keyup", event => {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("enter").click();
+        }
+    });
 }
