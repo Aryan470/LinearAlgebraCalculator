@@ -2,8 +2,11 @@
 
 # LinearAlgebraCalculator
 
+## Access
+(https://linearalgebracalculator.herokuapp.com/)
+
 ## System
-This repository stores a standalone API that can process expressions on the /query address, using a Javalin backend. Each session is served based on the client, so each user gets a personalized storage space for their custom variables and functions. This expires after one hour of inactivity. To start, build the project or simply grab the jar file and then run it, it will start a Javalin instance and allow POST requests at port 7000 and address /query. A frontend will be written soon.
+This repository stores a standalone API that can process expressions on the /query address, using a Javalin backend. Each session is served based on the client, so each user gets a personalized storage space for their custom variables and functions. This expires after one hour of inactivity. To make your own instance, build the project or simply grab the jar file and then run it, it will start a Javalin instance and allow POST requests at port 7000 and address /query, and the frontend can be accessed at the root.
 
 ## Usage
 The calculator can handle many different functions, and does not care about whitespace
